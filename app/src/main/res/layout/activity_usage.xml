@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FAF9F5"
+    tools:context=".UsageActivity">
+
+    <!-- Header Section -->
+    <TextView
+        android:id="@+id/tv_usage_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_header"
+        android:padding="24dp"
+        android:text="주 며칠 접속하시는지\n솔직하게 선택해주세요"
+        android:textAlignment="center"
+        android:textColor="#2D3748"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_margin="20dp" />
+
+    <!-- Container for dynamic seekbar items -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp">
+
+        <LinearLayout
+            android:id="@+id/usage_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <!-- Bottom Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_analyze"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="36dp"
+        android:background="@drawable/bg_button_next"
+        android:textColor="#FFFFFF"
+        android:text="내 텅장 분석하기 💸"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:padding="12dp" />
+
+</LinearLayout>

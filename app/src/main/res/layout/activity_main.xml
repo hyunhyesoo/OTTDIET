@@ -1,0 +1,672 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FAF9F5"
+    tools:context=".MainActivity">
+
+    <!-- Header Section -->
+    <TextView
+        android:id="@+id/tv_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_header"
+        android:padding="24dp"
+        android:text="현재 구독 중인 서비스를\n모두 선택하세요"
+        android:textAlignment="center"
+        android:textColor="#2D3748"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_margin="20dp" />
+
+    <!-- Grid List Section -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Row 1: Netflix & YouTube -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false"
+                android:layout_marginBottom="12dp">
+
+                <!-- Netflix -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🍿"
+                            android:textSize="18sp"
+                            android:layout_marginEnd="6dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="넷플릭스"
+                            android:textColor="#2D3748"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                        <CheckBox
+                            android:id="@+id/cb_netflix"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp" />
+                    </LinearLayout>
+                    <EditText
+                        android:id="@+id/et_price_netflix"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="구독료 입력"
+                        android:textSize="12sp"
+                        android:inputType="number"
+                        android:textColor="#2D3748"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <!-- YouTube -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📺"
+                            android:textSize="18sp"
+                            android:layout_marginEnd="6dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="유튜브"
+                            android:textColor="#2D3748"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                        <CheckBox
+                            android:id="@+id/cb_youtube"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp" />
+                    </LinearLayout>
+                    <EditText
+                        android:id="@+id/et_price_youtube"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="구독료 입력"
+                        android:textSize="12sp"
+                        android:inputType="number"
+                        android:textColor="#2D3748"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Row 2: Watcha & Disney+ -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false"
+                android:layout_marginBottom="12dp">
+
+                <!-- Watcha -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🎞️"
+                            android:textSize="18sp"
+                            android:layout_marginEnd="6dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="왓챠"
+                            android:textColor="#2D3748"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                        <CheckBox
+                            android:id="@+id/cb_watcha"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp" />
+                    </LinearLayout>
+                    <EditText
+                        android:id="@+id/et_price_watcha"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="구독료 입력"
+                        android:textSize="12sp"
+                        android:inputType="number"
+                        android:textColor="#2D3748"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <!-- Disney+ -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🏰"
+                            android:textSize="18sp"
+                            android:layout_marginEnd="6dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="디즈니+"
+                            android:textColor="#2D3748"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                        <CheckBox
+                            android:id="@+id/cb_disney"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp" />
+                    </LinearLayout>
+                    <EditText
+                        android:id="@+id/et_price_disney"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="구독료 입력"
+                        android:textSize="12sp"
+                        android:inputType="number"
+                        android:textColor="#2D3748"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Row 3: TVING & Coupang Play -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false"
+                android:layout_marginBottom="12dp">
+
+                <!-- TVING -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🎬"
+                            android:textSize="18sp"
+                            android:layout_marginEnd="6dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="티빙"
+                            android:textColor="#2D3748"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                        <CheckBox
+                            android:id="@+id/cb_tving"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp" />
+                    </LinearLayout>
+                    <EditText
+                        android:id="@+id/et_price_tving"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="구독료 입력"
+                        android:textSize="12sp"
+                        android:inputType="number"
+                        android:textColor="#2D3748"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <!-- Coupang Play -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🚀"
+                            android:textSize="18sp"
+                            android:layout_marginEnd="6dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="쿠팡플레이"
+                            android:textColor="#2D3748"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                        <CheckBox
+                            android:id="@+id/cb_coupang"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp" />
+                    </LinearLayout>
+                    <EditText
+                        android:id="@+id/et_price_coupang"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="구독료 입력"
+                        android:textSize="12sp"
+                        android:inputType="number"
+                        android:textColor="#2D3748"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Row 4: Wavve & Apple TV+ -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false"
+                android:layout_marginBottom="12dp">
+
+                <!-- Wavve -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🌊"
+                            android:textSize="18sp"
+                            android:layout_marginEnd="6dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="웨이브"
+                            android:textColor="#2D3748"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                        <CheckBox
+                            android:id="@+id/cb_wavve"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp" />
+                    </LinearLayout>
+                    <EditText
+                        android:id="@+id/et_price_wavve"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="구독료 입력"
+                        android:textSize="12sp"
+                        android:inputType="number"
+                        android:textColor="#2D3748"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <!-- Apple TV+ -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🍎"
+                            android:textSize="18sp"
+                            android:layout_marginEnd="6dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="애플 TV+"
+                            android:textColor="#2D3748"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                        <CheckBox
+                            android:id="@+id/cb_appletv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp" />
+                    </LinearLayout>
+                    <EditText
+                        android:id="@+id/et_price_appletv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="구독료 입력"
+                        android:textSize="12sp"
+                        android:inputType="number"
+                        android:textColor="#2D3748"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Row 5: Melon & YouTube Music -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false"
+                android:layout_marginBottom="12dp">
+
+                <!-- Melon -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🍈"
+                            android:textSize="18sp"
+                            android:layout_marginEnd="6dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="멜론"
+                            android:textColor="#2D3748"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                        <CheckBox
+                            android:id="@+id/cb_melon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp" />
+                    </LinearLayout>
+                    <EditText
+                        android:id="@+id/et_price_melon"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="구독료 입력"
+                        android:textSize="12sp"
+                        android:inputType="number"
+                        android:textColor="#2D3748"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <!-- YouTube Music -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🎵"
+                            android:textSize="18sp"
+                            android:layout_marginEnd="6dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="유튜브 뮤직"
+                            android:textColor="#2D3748"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                        <CheckBox
+                            android:id="@+id/cb_ytmusic"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp" />
+                    </LinearLayout>
+                    <EditText
+                        android:id="@+id/et_price_ytmusic"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="구독료 입력"
+                        android:textSize="12sp"
+                        android:inputType="number"
+                        android:textColor="#2D3748"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Row 6: Genie & Spotify -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false"
+                android:layout_marginBottom="12dp">
+
+                <!-- Genie -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🧞"
+                            android:textSize="18sp"
+                            android:layout_marginEnd="6dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="지니뮤직"
+                            android:textColor="#2D3748"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                        <CheckBox
+                            android:id="@+id/cb_genie"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp" />
+                    </LinearLayout>
+                    <EditText
+                        android:id="@+id/et_price_genie"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="구독료 입력"
+                        android:textSize="12sp"
+                        android:inputType="number"
+                        android:textColor="#2D3748"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <!-- Spotify -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🎧"
+                            android:textSize="18sp"
+                            android:layout_marginEnd="6dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="스포티파이"
+                            android:textColor="#2D3748"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                        <CheckBox
+                            android:id="@+id/cb_spotify"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp" />
+                    </LinearLayout>
+                    <EditText
+                        android:id="@+id/et_price_spotify"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="구독료 입력"
+                        android:textSize="12sp"
+                        android:inputType="number"
+                        android:textColor="#2D3748"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="36dp"
+        android:background="@drawable/bg_button_next"
+        android:textColor="#FFFFFF"
+        android:text="▶ 다음으로"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:padding="12dp" />
+
+</LinearLayout>
