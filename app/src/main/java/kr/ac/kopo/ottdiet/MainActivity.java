@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Predefine the 12 OTT/Music services (excluding Laftel)
+        // Predefine the 10 OTT/Music services (replaced YouTube Music with Spotify)
         services = new ServiceItem[]{
             new ServiceItem("넷플릭스", R.id.cb_netflix, R.id.et_price_netflix, "price_netflix", "🍿"),
             new ServiceItem("유튜브", R.id.cb_youtube, R.id.et_price_youtube, "price_youtube", "📺"),
@@ -48,11 +48,9 @@ public class MainActivity extends AppCompatActivity {
             new ServiceItem("티빙", R.id.cb_tving, R.id.et_price_tving, "price_tving", "🎬"),
             new ServiceItem("쿠팡플레이", R.id.cb_coupang, R.id.et_price_coupang, "price_coupang", "🚀"),
             new ServiceItem("웨이브", R.id.cb_wavve, R.id.et_price_wavve, "price_wavve", "🌊"),
-            new ServiceItem("애플 TV+", R.id.cb_appletv, R.id.et_price_appletv, "price_appletv", "🍎"),
             new ServiceItem("멜론", R.id.cb_melon, R.id.et_price_melon, "price_melon", "🍈"),
-            new ServiceItem("유튜브 뮤직", R.id.cb_ytmusic, R.id.et_price_ytmusic, "price_ytmusic", "🎵"),
-            new ServiceItem("지니뮤직", R.id.cb_genie, R.id.et_price_genie, "price_genie", "🧞"),
-            new ServiceItem("스포티파이", R.id.cb_spotify, R.id.et_price_spotify, "price_spotify", "🎧")
+            new ServiceItem("스포티파이", R.id.cb_spotify, R.id.et_price_spotify, "price_spotify", "🎧"),
+            new ServiceItem("지니뮤직", R.id.cb_genie, R.id.et_price_genie, "price_genie", "🧞")
         };
 
         SharedPreferences prefs = getSharedPreferences("OTT_PREFS", MODE_PRIVATE);
@@ -69,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 et.setText(String.valueOf(savedPrice));
             } else {
                 cb.setChecked(false);
-                et.setVisibility(View.GONE);
+                et.setVisibility(View.INVISIBLE); // Keep space reserved to maintain height
                 et.setText("");
             }
 
@@ -79,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                     et.setVisibility(View.VISIBLE);
                     et.requestFocus();
                 } else {
-                    et.setVisibility(View.GONE);
+                    et.setVisibility(View.INVISIBLE); // Keep space reserved to maintain height
                     et.setText("");
                 }
             });

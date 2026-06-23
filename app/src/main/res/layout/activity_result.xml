@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FAF9F5"
+    android:background="#EBF8F5"
     tools:context=".ResultActivity">
 
     <!-- Header Section (Total Monthly Fee) -->
@@ -95,7 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_button_retry"
-            android:textColor="#4A5568"
+            android:textColor="#00796B"
             android:text="다시 분석하기"
             android:textSize="15sp"
             android:textStyle="bold"

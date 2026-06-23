@@ -11,21 +11,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.OTTDIET">
+        
+        <!-- Splash Screen Activity (Launcher) -->
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Main Screen Activity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <!-- Usage Screen Activity -->
         <activity
             android:name=".UsageActivity"
             android:exported="false" />
+
+        <!-- Result Screen Activity -->
         <activity
             android:name=".ResultActivity"
             android:exported="false" />
+            
     </application>
 
 </manifest>

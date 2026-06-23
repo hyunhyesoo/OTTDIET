@@ -12,8 +12,26 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ResultActivity extends AppCompatActivity {
+
+    // Helper class to sort and display results in order of worst cost-effectiveness
+    private static class AnalysisItem implements Comparable<AnalysisItem> {
+        String name;
+        int fee;
+        int days;
+        int monthlyDays;
+        double metric;
+        String htmlComment;
+
+        @Override
+        public int compareTo(AnalysisItem o) {
+            // Sort in descending order (highest metric i.e. worst cost-effectiveness first)
+            return Double.compare(o.metric, this.metric);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +80,8 @@ public class ResultActivity extends AppCompatActivity {
             tvPriceComment.setText("(내 텅장이 완전히 털렸어요! 💸)");
         }
 
-        // 3. Analyze each service and build HTML text
-        StringBuilder htmlBuilder = new StringBuilder();
-        double worstMetric = -1;
-        String worstService = null;
+        // 3. Process each service and save to list for sorting (Top 10 logic: no emojis, bold names, colored amounts)
+        List<AnalysisItem> analysisList = new ArrayList<>();
 
         for (int i = 0; i < selectedNames.size(); i++) {
             String name = selectedNames.get(i);
@@ -74,37 +90,62 @@ public class ResultActivity extends AppCompatActivity {
 
             int monthlyDays = days * 4;
 
-            // Cost effectiveness metric: 0-day usage is treated as worst (scaled by price to cancel highest fee first)
             double metric;
+            StringBuilder itemHtml = new StringBuilder();
+
             if (days == 0) {
                 metric = 100000000.0 + fee; // Infinite cost, ordered by fee
                 
-                htmlBuilder.append("주 0회(한 달에 0번) 접속하시네요<br>")
-                        .append("<b><font color='#E53935'>").append(name).append("</font></b> 앱 한 번 켤 때마다<br>")
-                        .append("<font color='#E53935'><b>[기부 중]</b></font><br>")
-                        .append("기부천사 납셨네요 👼<br>")
-                        .append("<font color='#E53935'><b>지금 즉시 해지하세요!</b></font><br><br>");
+                itemHtml.append("주 0회(한 달에 0번) 접속하시네요<br>")
+                        .append("<b>").append(name).append("</b> 앱 한 번 켤 때마다<br>")
+                        .append("<b><font color='#E53935'>기부 중</font></b><br>")
+                        .append("기부천사 납셨네요<br>")
+                        .append("<b><font color='#E53935'>지금 즉시 해지하세요!</font></b><br><br>");
             } else {
                 int costPerDay = (int) Math.round((double) fee / monthlyDays);
                 metric = (double) fee / monthlyDays;
 
-                htmlBuilder.append("주 ").append(days).append("회(한 달에 ").append(monthlyDays).append("번) 접속하시네요<br>")
-                        .append("<b><font color='#1A202C'>").append(name).append("</font></b> 앱 한 번 켤 때마다<br>")
-                        .append("<b><font size='5' color='#2B6CB0'>").append(df.format(costPerDay)).append("원</font></b>씩 내고 계십니다<br>");
+                itemHtml.append("주 ").append(days).append("회(한 달에 ").append(monthlyDays).append("번) 접속하시네요<br>")
+                        .append("<b>").append(name).append("</b> 앱 한 번 켤 때마다<br>");
 
-                if (days <= 2) {
-                    htmlBuilder.append("차라리 영화관/공연장을 가세요 🎬<br><font color='#E53935'><b>당장 해지 추천!</b></font><br><br>");
-                } else if (days <= 5) {
-                    htmlBuilder.append("본전은 치고 있으나 🤔<br>밥 먹을 때 무조건 켜두세요!<br><br>");
+                // Dynamic color based on thresholds (>3000 Red, 1000~3000 Orange, <1000 Green)
+                if (costPerDay > 3000) {
+                    itemHtml.append("<b><font size='5' color='#E53935'>").append(df.format(costPerDay)).append("원</font></b>씩 내고 계십니다<br>")
+                            .append("차라리 영화관/공연장을 가세요<br><b><font color='#E53935'>당장 해지 추천!</font></b><br><br>");
+                } else if (costPerDay >= 1000) {
+                    itemHtml.append("<b><font size='5' color='#DD6B20'>").append(df.format(costPerDay)).append("원</font></b>씩 내고 계십니다<br>")
+                            .append("본전은 치고 있으나<br><b><font color='#DD6B20'>밥 먹을 때 무조건 켜두세요!</font></b><br><br>");
                 } else {
-                    htmlBuilder.append("<font color='#388E3C'><b>아주 훌륭한 소비입니다! 👍</b></font><br><br>");
+                    itemHtml.append("<b><font size='5' color='#388E3C'>").append(df.format(costPerDay)).append("원</font></b>씩 내고 계십니다<br>")
+                            .append("<b><font color='#388E3C'>아주 훌륭한 소비입니다!</font></b><br><br>");
                 }
             }
 
-            if (metric > worstMetric) {
-                worstMetric = metric;
-                worstService = name;
+            AnalysisItem item = new AnalysisItem();
+            item.name = name;
+            item.fee = fee;
+            item.days = days;
+            item.monthlyDays = monthlyDays;
+            item.metric = metric;
+            item.htmlComment = itemHtml.toString();
+
+            analysisList.add(item);
+        }
+
+        // Sort results: worst cost-effectiveness first
+        Collections.sort(analysisList);
+
+        // Build sorted HTML analysis output
+        StringBuilder htmlBuilder = new StringBuilder();
+        String worstService = null;
+
+        if (!analysisList.isEmpty()) {
+            worstService = analysisList.get(0).name; // The first item after sorting is the worst
+            for (AnalysisItem item : analysisList) {
+                htmlBuilder.append(item.htmlComment);
             }
+        } else {
+            htmlBuilder.append("분석 결과가 여기에 나타납니다.");
         }
 
         // Set HTML text based on Android SDK version
@@ -137,20 +178,18 @@ public class ResultActivity extends AppCompatActivity {
         });
     }
 
-    // Helper method to retrieve unsubscription links
+    // Helper method to retrieve unsubscription links (Top 10 mapping)
     private String getUnsubscribeUrl(String serviceName) {
         if (serviceName == null) return "https://www.google.com";
         switch (serviceName) {
-            case "넷플릭스": return "https://www.netflix.com/CancelPlan";
-            case "유튜브": return "https://www.youtube.com/paid_memberships";
-            case "디즈니+": return "https://www.disneyplus.com/";
-            case "티빙": return "https://www.tving.com/";
-            case "웨이브": return "https://www.wavve.com/";
-            case "왓챠": return "https://watcha.com/";
-            case "쿠팡플레이": return "https://www.coupang.com";
-            case "애플 TV+": return "https://support.apple.com/billing";
+            case "넷플릭스": return "https://www.netflix.com";
+            case "유튜브": return "https://www.youtube.com";
+            case "디즈니+": return "https://www.disneyplus.com";
+            case "티빙": return "https://www.tving.com";
+            case "웨이브": return "https://www.wavve.com";
+            case "왓챠": return "https://watcha.com";
+            case "쿠팡플레이": return "https://www.coupangplay.com";
             case "멜론": return "https://www.melon.com";
-            case "유튜브 뮤직": return "https://www.youtube.com/paid_memberships";
             case "지니뮤직": return "https://www.genie.co.kr";
             case "스포티파이": return "https://www.spotify.com";
             default: return "https://www.google.com";
