@@ -17,7 +17,6 @@ import java.util.List;
 
 public class ResultActivity extends AppCompatActivity {
 
-    // Helper class to sort and display results in order of worst cost-effectiveness
     private static class AnalysisItem implements Comparable<AnalysisItem> {
         String name;
         int fee;
@@ -25,6 +24,7 @@ public class ResultActivity extends AppCompatActivity {
         int monthlyDays;
         double metric;
         String htmlComment;
+        String shareComment;
 
         @Override
         public int compareTo(AnalysisItem o) {
@@ -38,7 +38,14 @@ public class ResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
-        // 1. Retrieve passed data
+        findViewById(R.id.btn_back).setOnClickListener(v -> finish());
+
+        // Enable native Back button in Action Bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("분석 결과");
+        }
+
         Intent intent = getIntent();
         ArrayList<String> selectedNames = intent.getStringArrayListExtra("selectedNames");
         ArrayList<Integer> selectedPrices = intent.getIntegerArrayListExtra("selectedPrices");
@@ -54,11 +61,10 @@ public class ResultActivity extends AppCompatActivity {
         TextView tvPriceComment = findViewById(R.id.tv_price_comment);
         TextView tvAnalysisResult = findViewById(R.id.tv_analysis_result);
         Button btnUnsubscribe = findViewById(R.id.btn_unsubscribe);
-        Button btnRetry = findViewById(R.id.btn_retry);
+        Button btnShare = findViewById(R.id.btn_share);
 
         DecimalFormat df = new DecimalFormat("#,###");
 
-        // 2. Calculate total fee and set header comments
         int totalFee = 0;
         for (int price : selectedPrices) {
             totalFee += price;
@@ -80,7 +86,6 @@ public class ResultActivity extends AppCompatActivity {
             tvPriceComment.setText("(내 텅장이 완전히 털렸어요! 💸)");
         }
 
-        // 3. Process each service and save to list for sorting (Top 10 logic: no emojis, bold names, colored amounts)
         List<AnalysisItem> analysisList = new ArrayList<>();
 
         for (int i = 0; i < selectedNames.size(); i++) {
@@ -92,15 +97,18 @@ public class ResultActivity extends AppCompatActivity {
 
             double metric;
             StringBuilder itemHtml = new StringBuilder();
+            String shareText = "";
 
             if (days == 0) {
-                metric = 100000000.0 + fee; // Infinite cost, ordered by fee
+                metric = 100000000.0 + fee;
                 
                 itemHtml.append("주 0회(한 달에 0번) 접속하시네요<br>")
                         .append("<b>").append(name).append("</b> 앱 한 번 켤 때마다<br>")
                         .append("<b><font color='#E53935'>기부 중</font></b><br>")
                         .append("기부천사 납셨네요<br>")
                         .append("<b><font color='#E53935'>지금 즉시 해지하세요!</font></b><br><br>");
+                
+                shareText = "주 0회(한 달에 0번) 접속 -> 기부 중 (지금 즉시 해지하세요!)";
             } else {
                 int costPerDay = (int) Math.round((double) fee / monthlyDays);
                 metric = (double) fee / monthlyDays;
@@ -108,16 +116,22 @@ public class ResultActivity extends AppCompatActivity {
                 itemHtml.append("주 ").append(days).append("회(한 달에 ").append(monthlyDays).append("번) 접속하시네요<br>")
                         .append("<b>").append(name).append("</b> 앱 한 번 켤 때마다<br>");
 
-                // Dynamic color based on thresholds (>3000 Red, 1000~3000 Orange, <1000 Green)
+                // (>3000 Red, 1000~3000 Orange, <1000 Green)
                 if (costPerDay > 3000) {
                     itemHtml.append("<b><font size='5' color='#E53935'>").append(df.format(costPerDay)).append("원</font></b>씩 내고 계십니다<br>")
                             .append("차라리 영화관/공연장을 가세요<br><b><font color='#E53935'>당장 해지 추천!</font></b><br><br>");
+                    
+                    shareText = "주 " + days + "회(한 달에 " + monthlyDays + "번) 접속 -> 1회당 " + df.format(costPerDay) + "원 (당장 해지 추천!)";
                 } else if (costPerDay >= 1000) {
                     itemHtml.append("<b><font size='5' color='#DD6B20'>").append(df.format(costPerDay)).append("원</font></b>씩 내고 계십니다<br>")
                             .append("본전은 치고 있으나<br><b><font color='#DD6B20'>밥 먹을 때 무조건 켜두세요!</font></b><br><br>");
+                    
+                    shareText = "주 " + days + "회(한 달에 " + monthlyDays + "번) 접속 -> 1회당 " + df.format(costPerDay) + "원 (밥 먹을 때 무조건 켜두세요!)";
                 } else {
                     itemHtml.append("<b><font size='5' color='#388E3C'>").append(df.format(costPerDay)).append("원</font></b>씩 내고 계십니다<br>")
                             .append("<b><font color='#388E3C'>아주 훌륭한 소비입니다!</font></b><br><br>");
+                    
+                    shareText = "주 " + days + "회(한 달에 " + monthlyDays + "번) 접속 -> 1회당 " + df.format(costPerDay) + "원 (아주 훌륭한 소비입니다!)";
                 }
             }
 
@@ -128,6 +142,7 @@ public class ResultActivity extends AppCompatActivity {
             item.monthlyDays = monthlyDays;
             item.metric = metric;
             item.htmlComment = itemHtml.toString();
+            item.shareComment = shareText;
 
             analysisList.add(item);
         }
@@ -135,19 +150,53 @@ public class ResultActivity extends AppCompatActivity {
         // Sort results: worst cost-effectiveness first
         Collections.sort(analysisList);
 
-        // Build sorted HTML analysis output
+        // Build sorted HTML analysis output and plain text for sharing
         StringBuilder htmlBuilder = new StringBuilder();
+        StringBuilder shareBuilder = new StringBuilder();
         String worstService = null;
-
+ 
+        StringBuilder cancelBuilder = new StringBuilder();
+        StringBuilder cautionBuilder = new StringBuilder();
+        StringBuilder keepBuilder = new StringBuilder();
+ 
         if (!analysisList.isEmpty()) {
-            worstService = analysisList.get(0).name; // The first item after sorting is the worst
+            worstService = analysisList.get(0).name;
             for (AnalysisItem item : analysisList) {
                 htmlBuilder.append(item.htmlComment);
+                
+                // Group each item for a compact, single-line mobile share format
+                if (item.days == 0) {
+                    cancelBuilder.append("• ").append(item.name).append(": 기부 중 (당장 해지!)\n");
+                } else {
+                    int costPerDay = (int) Math.round((double) item.fee / item.monthlyDays);
+                    if (costPerDay > 3000) {
+                        cancelBuilder.append("• ").append(item.name).append(": 1회당 ").append(df.format(costPerDay)).append("원 (비효율!)\n");
+                    } else if (costPerDay >= 1000) {
+                        cautionBuilder.append("• ").append(item.name).append(": 1회당 ").append(df.format(costPerDay)).append("원 (더 보기!)\n");
+                    } else {
+                        keepBuilder.append("• ").append(item.name).append(": 1회당 ").append(df.format(costPerDay)).append("원 (알뜰 소비)\n");
+                    }
+                }
             }
         } else {
             htmlBuilder.append("분석 결과가 여기에 나타납니다.");
         }
-
+ 
+        shareBuilder.append("📊 [OTT DIET 구독 분석 결과]\n")
+                .append("한 달 총 구독료: ").append(df.format(totalFee)).append("원\n\n");
+ 
+        if (cancelBuilder.length() > 0) {
+            shareBuilder.append("🚨 해지 추천!\n").append(cancelBuilder).append("\n");
+        }
+        if (cautionBuilder.length() > 0) {
+            shareBuilder.append("🤔 사용량 증대 권장!\n").append(cautionBuilder).append("\n");
+        }
+        if (keepBuilder.length() > 0) {
+            shareBuilder.append("💚 알뜰 소비 중!\n").append(keepBuilder).append("\n");
+        }
+        
+        shareBuilder.append("건강한 소비를 위해 지금 구독 다이어트를 시작해보세요! 🏃‍♂️");
+ 
         // Set HTML text based on Android SDK version
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             tvAnalysisResult.setText(Html.fromHtml(htmlBuilder.toString(), Html.FROM_HTML_MODE_LEGACY));
@@ -156,8 +205,22 @@ public class ResultActivity extends AppCompatActivity {
         }
 
         // 4. Configure Unsubscribe Button dynamically
-        if (worstService != null) {
+        boolean needsUnsubscribe = false;
+        if (!analysisList.isEmpty()) {
+            AnalysisItem worstItem = analysisList.get(0);
+            if (worstItem.days == 0) {
+                needsUnsubscribe = true; // 0 days usage is a donation (always worst)
+            } else {
+                int costPerDay = (int) Math.round((double) worstItem.fee / worstItem.monthlyDays);
+                if (costPerDay >= 1000) {
+                    needsUnsubscribe = true; // Only suggest canceling if worst cost is >= 1,000 KRW
+                }
+            }
+        }
+
+        if (needsUnsubscribe && worstService != null) {
             btnUnsubscribe.setText("[" + worstService + "] 해지하러 가기");
+            btnUnsubscribe.setEnabled(true);
             final String targetService = worstService;
             btnUnsubscribe.setOnClickListener(v -> {
                 String url = getUnsubscribeUrl(targetService);
@@ -165,20 +228,27 @@ public class ResultActivity extends AppCompatActivity {
                 startActivity(browserIntent);
             });
         } else {
-            btnUnsubscribe.setText("해지할 서비스 없음");
+            btnUnsubscribe.setText("해지할 서비스 없음 (유지 추천) 🎉");
             btnUnsubscribe.setEnabled(false);
+            btnUnsubscribe.setBackgroundResource(R.drawable.bg_button_retry);
+            btnUnsubscribe.setTextColor(android.graphics.Color.parseColor("#718096"));
         }
 
-        // 5. Configure 'Analyze Again' button to restart MainActivity
-        btnRetry.setOnClickListener(v -> {
-            Intent mainIntent = new Intent(ResultActivity.this, MainActivity.class);
-            mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(mainIntent);
-            finish();
+        // 5. Configure Share Button to share analysis results using native chooser
+        btnShare.setOnClickListener(v -> {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareBuilder.toString());
+            startActivity(Intent.createChooser(shareIntent, "분석 결과 공유하기"));
         });
     }
 
-    // Helper method to retrieve unsubscription links (Top 10 mapping)
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish(); // Return to UsageActivity
+        return true;
+    }
+
     private String getUnsubscribeUrl(String serviceName) {
         if (serviceName == null) return "https://www.google.com";
         switch (serviceName) {

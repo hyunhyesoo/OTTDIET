@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UsageActivity extends AppCompatActivity {
-
     private ArrayList<String> selectedNames;
     private ArrayList<Integer> selectedPrices;
     private ArrayList<String> selectedEmojis;
@@ -26,7 +25,14 @@ public class UsageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usage);
 
-        // 1. Retrieve passed data
+        findViewById(R.id.btn_back).setOnClickListener(v -> finish());
+
+        // Enable native Back button in Action Bar (as fallback)
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("접속 일수 입력");
+        }
+
         Intent intent = getIntent();
         selectedNames = intent.getStringArrayListExtra("selectedNames");
         selectedPrices = intent.getIntegerArrayListExtra("selectedPrices");
@@ -41,7 +47,6 @@ public class UsageActivity extends AppCompatActivity {
         LinearLayout usageContainer = findViewById(R.id.usage_container);
         seekBars = new ArrayList<>();
 
-        // 2. Dynamically inflate layout for each selected service
         for (int i = 0; i < selectedNames.size(); i++) {
             String name = selectedNames.get(i);
             int price = selectedPrices.get(i);
@@ -53,7 +58,7 @@ public class UsageActivity extends AppCompatActivity {
             TextView tvDays = itemView.findViewById(R.id.tv_item_days);
             SeekBar sbUsage = itemView.findViewById(R.id.sb_item_usage);
 
-            // Display format: Emoji + Name (e.g. 🍿 넷플릭스)
+            // Display format: Emoji + Name (🍿 넷플릭스)
             tvName.setText(emoji + " " + name);
             tvDays.setText("0일");
 
@@ -78,7 +83,6 @@ public class UsageActivity extends AppCompatActivity {
             usageContainer.addView(itemView);
         }
 
-        // 3. Handle 'Analyze My Wallet' Button click
         Button btnAnalyze = findViewById(R.id.btn_analyze);
         btnAnalyze.setOnClickListener(v -> {
             ArrayList<Integer> usageDays = new ArrayList<>();
@@ -93,5 +97,11 @@ public class UsageActivity extends AppCompatActivity {
             resultIntent.putIntegerArrayListExtra("selectedDays", usageDays);
             startActivity(resultIntent);
         });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish(); // Return to MainActivity
+        return true;
     }
 }
