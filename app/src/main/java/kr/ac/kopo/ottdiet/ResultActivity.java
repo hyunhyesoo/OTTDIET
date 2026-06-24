@@ -213,7 +213,7 @@ public class ResultActivity extends AppCompatActivity {
             } else {
                 int costPerDay = (int) Math.round((double) worstItem.fee / worstItem.monthlyDays);
                 if (costPerDay >= 1000) {
-                    needsUnsubscribe = true; // Only suggest canceling if worst cost is >= 1,000 KRW
+                    needsUnsubscribe = true; // Suggest canceling if 1-day cost is 1,000 KRW or more (Orange/Red zones)
                 }
             }
         }
